@@ -1,0 +1,100 @@
+// Problem: Course Schedule (LeetCode)
+// Given a list of prerequisites for courses, determine if it is possible to finish all the courses.
+// We can represent this problem as a directed graph where each course is a node, and there is a directed edge
+// from course A to course B if course A is a prerequisite for course B.
+
+// Intuition:
+// 1. We need to figure out if there is a way to complete all courses (i.e., if there's a valid topological order).
+// 2. The problem can be treated as a **graph traversal** problem.
+// 3. If there are cycles in the graph, it's impossible to complete all courses. 
+//    - For example, Course A depends on B, B depends on C, and C depends on A.
+// 4. We will use **Kahn's Algorithm** for topological sorting, which works by calculating in-degrees (number of incoming edges).
+
+// Step-by-step Approach:
+
+// 1. **Graph Representation (Adjacency List)**
+//  - Each course is a node, and an edge from A to B means A is a prerequisite for B.
+//  - Create an adjacency list (graph) where each node points to its dependent courses.
+//  - We will also track the in-degrees (number of prerequisites) for each course.
+
+// 2. **Topological Sort (Kahn’s Algorithm)**
+//  - Start with all courses that have no prerequisites (i.e., in-degree of 0).
+//  - Process these courses, reduce the in-degrees of their dependent courses 
+//  - If any course has an in-degree of 0, it’s ready to be processed.
+
+// 3. **Cycle Detection**
+//  - If we process all nodes and the number of courses processed equals the number of total courses, there's no cycle.
+//  - If not, there’s a cycle, and it's impossible to finish all courses.
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <unordered_map>
+
+using namespace std;
+
+// Function to check if we can finish all courses
+bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+    // Step 1: Create the adjacency list and in-degree map
+    unordered_map<int, vector<int>> adj;  // adjacency list for the graph
+    vector<int> inDegree(numCourses, 0);  // in-degree for each course
+
+    // Step 2: Build the graph from prerequisites
+    for (auto& pre : prerequisites) { 
+        // building the adjacency list as prerequisite has only 2 elements on each of its row so take them as {1,0} here the 
+        // first element is the course and the second element is the prerequisite course
+        int course = pre[0];         // The course that depends on the prerequisite
+        int prerequisite = pre[1];   // The prerequisite course
+        adj[prerequisite].push_back(course);  // Add edge in the graph
+        inDegree[course]++;          // Increase in-degree of the dependent course
+    }
+
+    // Step 3: Initialize a queue to process courses with no prerequisites (in-degree 0)
+    queue<int> q;
+    for (int i = 0; i < numCourses; ++i) {
+        if (inDegree[i] == 0) {
+            q.push(i);  // Course with no prerequisites can be processed
+        }
+    }
+
+    // Step 4: Process courses using BFS (topological sort)
+    int processedCourses = 0;
+    while (!q.empty()) {
+        int course = q.front();
+        q.pop();
+        processedCourses++;  // Increment the number of processed courses
+        
+        // Reduce the in-degree of each dependent course
+        for (int dependentCourse : adj[course]) {
+            inDegree[dependentCourse]--;
+            if (inDegree[dependentCourse] == 0) {
+                q.push(dependentCourse);  // If no more prerequisites, process this course
+            }
+        }
+    }
+
+    // Step 5: If the number of processed courses equals the total number of courses, there’s no cycle
+    return processedCourses == numCourses;
+}
+
+// Example Usage
+int main() {
+    // Test Case 1
+    int numCourses1 = 2;
+    vector<vector<int>> prerequisites1 = {{1, 0}};
+    cout << "Can finish all courses (Test Case 1): " << (canFinish(numCourses1, prerequisites1) ? "Yes" : "No") << endl;
+
+    // Test Case 2
+    int numCourses2 = 2;
+    vector<vector<int>> prerequisites2 = {{1, 0}, {0, 1}};
+    cout << "Can finish all courses (Test Case 2): " << (canFinish(numCourses2, prerequisites2) ? "Yes" : "No") << endl;
+
+    return 0;
+}
+
+// Explanation of Key Steps:
+// 1. We initialize an adjacency list `adj` to store the graph and a vector `inDegree` to store the number of prerequisites for each course.
+// 2. For each pair in the `prerequisites` list, we add an edge in the adjacency list from the prerequisite to the dependent course and increment the in-degree of the dependent course.
+// 3. Then, we initialize a queue with all courses that have no prerequisites (in-degree 0). These courses can be processed right away.
+// 4. Using BFS, we process each course, reduce the in-degrees of its dependent courses, and add any course with an in-degree of 0 to the queue.
+// 5. Finally, if the number of processed courses equals the total number of courses, we return true (meaning it's possible to finish all courses). Otherwise, we return false (cycle detected).

@@ -1,0 +1,24 @@
+# For making a bfs things that need to keep in mind 
+1. It takes a starting node to start the traversal void(int startnode).
+2. It requires an adjacency matrix to check which node has an edge between them void(vector<vector<int>>&adj)
+3. It needs a visited array to mark the nodes that once visited.
+4. Make a queue and store the visited node in it and them perform whatever operation we want to 
+5. perform on it 
+#syntax: 
+queue<int> q; # intialized the queue 
+q.push(startnode) // The node has been pushed
+visited[startnode]// node has been marked as visited
+6. Now perform the traversal 
+while(!q.empty()){
+    int curr= q.front();// now we have stored the front element of the queue in the current varibale 
+    q.pop();// poping the node as we have stored it already 
+
+    for(int i=0; i<=adj.size();i++ ){// running the for loop to check one by one for each of the nodes 
+        if(adj[curr][i]==1 && !visited[i]){
+            q.push[i];
+            visited[i]=true;
+        }
+    }
+
+}
+

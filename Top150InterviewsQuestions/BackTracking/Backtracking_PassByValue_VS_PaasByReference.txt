@@ -1,0 +1,105 @@
+# Backtracking and Undoing: Key Concepts and Notes
+
+## Pass by Value vs Pass by Reference in Backtracking
+
+### 1. **Pass by Value**
+- When an object (e.g., a string) is passed by value, a **copy** of the object is created for the function.
+- Any changes (e.g., swaps) are **local** to that specific recursive call.
+- **No explicit undoing is required**, as the modifications to the object are automatically discarded when the function call ends.
+
+#### Example Code (Pass by Value):
+```cpp
+void backtrack(string tiles, int level, int &count) {
+    count++;
+    for (int i = level; i < tiles.length(); i++) {
+        if (i != level && tiles[i] == tiles[level])
+            continue; // Skip duplicates
+
+        swap(tiles[i], tiles[level]); // Swap
+        backtrack(tiles, level + 1, count); // Recursive call
+        // No need to undo the swap here
+    }
+}
+```
+
+### 2. **Pass by Reference**
+- When an object is passed by reference, the **original object** is modified in the function.
+- Changes persist across recursive calls and iterations unless explicitly undone.
+- **Explicit backtracking is required** to restore the object to its previous state.
+
+#### Example Code (Pass by Reference):
+```cpp
+void backtrack(string &tiles, int level, int &count) {
+    count++;
+    for (int i = level; i < tiles.length(); i++) {
+        if (i != level && tiles[i] == tiles[level])
+            continue; // Skip duplicates
+
+        swap(tiles[i], tiles[level]); // Swap
+        backtrack(tiles, level + 1, count); // Recursive call
+        swap(tiles[i], tiles[level]); // Undo the swap (backtracking)
+    }
+}
+```
+
+### Efficiency Considerations
+- **Pass by Value**:
+  - Simpler to implement, as no undoing is required.
+  - Comes with the performance cost of copying the object at each recursive call.
+- **Pass by Reference**:
+  - More efficient for larger input sizes since no copying occurs.
+  - Requires careful handling of backtracking (undoing swaps).
+
+## Why Sorting is Used
+- Sorting ensures that **duplicate elements are adjacent**.
+- This allows the condition `if (i != level && tiles[i] == tiles[level]) continue;` to skip over duplicates effectively.
+- Without sorting, skipping duplicates would be more complex and error-prone.
+
+#### Example:
+Input: `"AAB"`
+- Sorted: `"AAB"`
+- Recursive Tree:
+  - Start with `A` -> `AA` -> `AAB`
+  - Skip duplicate `A` at the same level.
+
+## Example Dry Run (Input: `"AAB"`)
+### Pass by Value Example
+1. **Initial Call**:
+   - `backtrack("AAB", 0, count)`
+   - `tiles = "AAB"` (original string remains unchanged outside this call).
+
+2. **Recursive Calls**:
+   - Level 0: Swap `A` with `A` -> Call `backtrack("AAB", 1, count)`.
+   - Level 1: Swap `A` with `A` -> Call `backtrack("AAB", 2, count)`.
+   - Level 2: Swap `B` with `B` -> Call `backtrack("AAB", 3, count)`.
+
+3. **No Undoing Needed**:
+   - Changes are local to each recursive call.
+
+### Pass by Reference Example
+1. **Initial Call**:
+   - `backtrack("AAB", 0, count)`
+   - `tiles` is modified directly.
+
+2. **Recursive Calls**:
+   - Level 0: Swap `A` with `A` -> Call `backtrack("AAB", 1, count)`.
+   - Level 1: Swap `A` with `B` -> Call `backtrack("ABA", 2, count)`.
+   - Undo: Swap `B` with `A` to restore `AAB`.
+
+3. **Undoing Ensures Original State**:
+   - Allows exploration of other branches in the recursion tree.
+
+## Common Mistakes
+1. **Forgetting to Sort the Input**:
+   - Without sorting, the duplicate skipping condition may not work.
+2. **Incorrect Duplicate Check**:
+   - Use `if (i != level && tiles[i] == tiles[level]) continue;` for pass-by-value.
+   - Use `if (i > start && tiles[i] == tiles[i - 1]) continue;` for pass-by-reference.
+3. **Not Undoing Swaps in Pass by Reference**:
+   - Always restore the original state before moving to the next iteration.
+
+## Key Takeaways
+- Choose **pass by value** for simplicity, but be aware of the performance cost.
+- Use **pass by reference** for efficiency, ensuring proper backtracking.
+- Sorting and duplicate skipping are crucial for avoiding redundant permutations.
+

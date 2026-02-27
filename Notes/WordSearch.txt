@@ -1,0 +1,60 @@
+// Step 1: 
+
+
+
+#include <vector>
+#include <string>
+using namespace std;
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int rows = board.size();
+        int cols = board[0].size();
+
+        // Iterate through every cell in the board
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // Start DFS if the first character matches
+                if (board[i][j] == word[0] && dfs(board, word, i, j, 0)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+private:
+    // Directions: right, down, left, up
+    vector<pair<int, int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    // Helper function for DFS
+    bool dfs(vector<vector<char>>& board, string& word, int x, int y, int index) {
+        // Base case: If the full word is matched
+        if (index == word.size()) {
+            return true;
+        }
+
+        // Boundary and character checks
+        if (x < 0 || x >= board.size() || y < 0 || y >= board[0].size() || board[x][y] != word[index]) {
+            return false;
+        }
+
+        // Mark the cell as visited by temporarily altering its value
+        char temp = board[x][y];
+        board[x][y] = '#';
+
+        // Explore all directions using the `directions` vector
+        for (auto dir : directions) {
+            int newX = x + dir.first;
+            int newY = y + dir.second;
+            if (dfs(board, word, newX, newY, index + 1)) {
+                return true;
+            }
+        }
+
+        // Backtrack by restoring the original value
+        board[x][y] = temp;
+
+        return false;
+    }
+};

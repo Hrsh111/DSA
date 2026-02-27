@@ -1,0 +1,202 @@
+================================================================================
+                         ADJACENCY LIST REPRESENTATION
+================================================================================
+
+THEORY:
+-------
+An Adjacency List is a way to represent a graph as a collection of lists.
+Each vertex in the graph has a list that contains all its adjacent vertices
+(neighbors).
+
+ADVANTAGES:
+-----------
+1. Space Efficient: O(V + E) space complexity
+2. Adding an edge is O(1)
+3. Efficient for sparse graphs
+4. Easy to iterate over all neighbors of a vertex
+
+DISADVANTAGES:
+--------------
+1. Checking if edge exists between two vertices is O(V) in worst case
+2. Not as cache-friendly as adjacency matrix
+
+================================================================================
+                              C++ IMPLEMENTATION
+================================================================================
+
+#include <iostream>
+#include <vector>
+#include <list>
+using namespace std;
+
+class Graph {
+    int V;                          // Number of vertices
+    vector<list<int>> adjList;      // Adjacency list
+
+public:
+    // Constructor
+    Graph(int vertices) {
+        V = vertices;
+        adjList.resize(V);
+    }
+
+    // Add edge (for undirected graph)
+    void addEdge(int u, int v) {
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);    // Remove this line for directed graph
+    }
+
+    // Add edge for directed graph
+    void addDirectedEdge(int u, int v) {
+        adjList[u].push_back(v);
+    }
+
+    // Print the adjacency list
+    void printGraph() {
+        for (int i = 0; i < V; i++) {
+            cout << "Vertex " << i << " -> ";
+            for (int neighbor : adjList[i]) {
+                cout << neighbor << " ";
+            }
+            cout << endl;
+        }
+    }
+
+    // Check if edge exists
+    bool hasEdge(int u, int v) {
+        for (int neighbor : adjList[u]) {
+            if (neighbor == v) return true;
+        }
+        return false;
+    }
+
+    // Get all neighbors of a vertex
+    list<int> getNeighbors(int v) {
+        return adjList[v];
+    }
+};
+
+int main() {
+    // Create a graph with 5 vertices (0 to 4)
+    Graph g(5);
+
+    // Add edges
+    g.addEdge(0, 1);
+    g.addEdge(0, 4);
+    g.addEdge(1, 2);
+    g.addEdge(1, 3);
+    g.addEdge(1, 4);
+    g.addEdge(2, 3);
+    g.addEdge(3, 4);
+
+    // Print the adjacency list
+    g.printGraph();
+
+    return 0;
+}
+
+================================================================================
+                                   EXAMPLE
+================================================================================
+
+Graph Visualization:
+--------------------
+        0 -------- 1
+        |        / | \
+        |      /   |   2
+        |    /     | /
+        4 -------- 3
+
+Adjacency List Representation:
+------------------------------
+Vertex 0 -> 1 4
+Vertex 1 -> 0 2 3 4
+Vertex 2 -> 1 3
+Vertex 3 -> 1 2 4
+Vertex 4 -> 0 1 3
+
+================================================================================
+                    WEIGHTED GRAPH ADJACENCY LIST
+================================================================================
+
+#include <iostream>
+#include <vector>
+#include <list>
+using namespace std;
+
+class WeightedGraph {
+    int V;
+    vector<list<pair<int, int>>> adjList;  // pair<neighbor, weight>
+
+public:
+    WeightedGraph(int vertices) {
+        V = vertices;
+        adjList.resize(V);
+    }
+
+    void addEdge(int u, int v, int weight) {
+        adjList[u].push_back({v, weight});
+        adjList[v].push_back({u, weight});  // Remove for directed graph
+    }
+
+    void printGraph() {
+        for (int i = 0; i < V; i++) {
+            cout << "Vertex " << i << " -> ";
+            for (auto &edge : adjList[i]) {
+                cout << "(" << edge.first << ", w=" << edge.second << ") ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    WeightedGraph wg(4);
+    wg.addEdge(0, 1, 10);
+    wg.addEdge(0, 2, 6);
+    wg.addEdge(0, 3, 5);
+    wg.addEdge(1, 3, 15);
+    wg.addEdge(2, 3, 4);
+
+    wg.printGraph();
+    return 0;
+}
+
+OUTPUT:
+-------
+Vertex 0 -> (1, w=10) (2, w=6) (3, w=5)
+Vertex 1 -> (0, w=10) (3, w=15)
+Vertex 2 -> (0, w=6) (3, w=4)
+Vertex 3 -> (0, w=5) (1, w=15) (2, w=4)
+
+================================================================================
+                          TIME & SPACE COMPLEXITY
+================================================================================
+
+Operation               | Time Complexity
+------------------------|----------------
+Add Vertex              | O(1)
+Add Edge                | O(1)
+Remove Edge             | O(E)
+Check Edge Exists       | O(V)
+Get All Neighbors       | O(1)
+Storage Space           | O(V + E)
+
+Where V = Number of Vertices, E = Number of Edges
+
+================================================================================
+                              WHEN TO USE
+================================================================================
+
+Use Adjacency List when:
+- Graph is sparse (few edges)
+- Need to iterate over all neighbors frequently
+- Memory is a constraint
+- Adding edges frequently
+
+Use Adjacency Matrix when:
+- Graph is dense (many edges)
+- Need to quickly check if edge exists
+- Graph is small
+
+================================================================================

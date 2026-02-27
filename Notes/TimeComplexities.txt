@@ -1,0 +1,38 @@
+Graph Algorithms and Their Time Complexities
+
+Cycle Detection in Undirected Graphs (Using DFS)
+
+Time Complexity: O(V + E)
+Explanation: DFS visits each vertex and edge once.
+Cycle Detection in Directed Graphs (Using Kahn's Algorithm for Topological Sort)
+
+Time Complexity: O(V + E)
+Explanation: Kahn's algorithm for Topological Sort requires processing each vertex once and each edge once.
+Minimum Spanning Tree (Using Kruskal's Algorithm)
+
+Time Complexity: O(E log E + E log V)
+Explanation: Sorting the edges takes O(E log E), and Union-Find operations take O(E log V).
+Minimum Spanning Tree (Using Prim's Algorithm)
+
+Time Complexity: O(E log V)
+Explanation: The priority queue operation dominates the complexity.
+Shortest Path in an Unweighted Graph (Breadth-First Search)
+
+Time Complexity: O(V + E)
+Explanation: BFS visits each vertex and edge once.
+Shortest Path in a Weighted Graph (Dijkstra's Algorithm)
+
+Time Complexity: O(V log V + E)
+Explanation: The priority queue (min-heap) dominates the complexity.
+Shortest Path in a Directed Acyclic Graph (Topological Sort + Relaxation)
+
+Time Complexity: O(V + E)
+Explanation: Kahn’s algorithm for Topological Sort and single-source relaxation takes linear time with respect to the number of edges and vertices.
+Strongly Connected Components (Kosaraju’s or Tarjan’s Algorithm)
+
+Time Complexity: O(V + E)
+Explanation: Both Kosaraju’s and Tarjan’s algorithms run in linear time with respect to the number of vertices and edges.
+Articulation Points in a Graph
+
+Time Complexity: O(V + E)
+Explanation: DFS traversal to find articulation points takes linear time with respect to the number of vertices and edges.

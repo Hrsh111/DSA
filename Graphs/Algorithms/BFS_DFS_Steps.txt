@@ -1,0 +1,158 @@
+
+# BFS (Breadth-First Search) Steps
+
+1. **Start Node**:
+   - BFS begins from a starting node. You pass the starting node as an argument.
+   
+   Syntax:
+
+   void bfs(int startNode);
+
+
+2. **Adjacency Matrix/List**:
+   - You need an adjacency matrix (or adjacency list) to check which nodes are directly connected.
+   
+   Syntax:
+  
+   void bfs(vector<vector<int>>& adj);
+
+
+3. **Visited Array**:
+   - You need a visited array to keep track of which nodes have already been visited. This prevents revisiting the same node.
+   
+   Syntax:
+
+   vector<bool> visited(adj.size(), false);
+
+
+4. **Queue**:
+   - A queue is used to explore the graph in levels, starting from the given node.
+   
+   Syntax:
+
+   queue<int> q;
+   q.push(startNode);
+   visited[startNode] = true;
+
+
+5. **Traverse the Graph**:
+   - We will perform the BFS traversal by exploring all neighboring nodes of the current node.
+   
+   Syntax:
+
+   while (!q.empty()) {
+       int curr = q.front();
+       q.pop();
+   
+       for (int i = 0; i < adj.size(); i++) {
+           if (adj[curr][i] == 1 && !visited[i]) {
+               q.push(i);
+               visited[i] = true;
+           }
+       }
+   }
+
+
+6. **Additional Key Points**:
+   - BFS explores the graph level by level, meaning it visits all nodes at distance 1 from the starting 
+   - node first, then all nodes at distance 2, and so on.
+   - You can perform operations on each node inside the `while` loop, such as printing the node or 
+   - performing any algorithmic operation.
+
+
+# DFS (Depth-First Search) Steps
+
+1. **Start Node**:
+   - DFS also starts with a specified node and explores as deep as possible into the graph before 
+   - backtracking.
+   
+   Syntax:
+   void dfs(int startNode);
+
+
+2. **Adjacency Matrix/List**:
+   - Similar to BFS, an adjacency matrix or adjacency list is used to represent the graph.
+
+3. **Visited Array**:
+   - A visited array (or set) is used to keep track of nodes that have already been explored to avoid 
+   - cycles and revisits.
+   
+   Syntax:
+   ```cpp
+   vector<bool> visited(adj.size(), false);
+   ```
+
+4. **Stack/Recursion**:
+   - DFS can be implemented either using a stack or recursion. If using a stack, you'll push the current
+   -  node onto the stack. Recursion inherently uses the call stack.
+   
+   Syntax (using stack):
+   ```cpp
+   stack<int> s;
+   s.push(startNode);
+   visited[startNode] = true;
+   
+   while (!s.empty()) {
+       int curr = s.top();
+       s.pop();
+       
+       // Operations on current node (e.g., print it)
+       for (int i = 0; i < adj.size(); i++) {
+           if (adj[curr][i] == 1 && !visited[i]) {
+               s.push(i);
+               visited[i] = true;
+           }
+       }
+   }
+   ```
+
+   - Alternatively, the DFS can be implemented recursively:
+   
+   Syntax (recursive):
+   ```cpp
+   void dfsRecursive(int node, vector<vector<int>>& adj, vector<bool>& visited) {
+       visited[node] = true;
+       // Operation on current node (e.g., print it)
+       for (int i = 0; i < adj.size(); i++) {
+           if (adj[node][i] == 1 && !visited[i]) {
+               dfsRecursive(i, adj, visited);
+           }
+       }
+   }
+   ```
+
+6. **Key Points for DFS**:
+   - DFS explores as far as possible along a branch before backtracking.
+   - DFS can be implemented iteratively with a stack, or recursively using the function call stack.
+   - DFS is useful for problems that require visiting all nodes in a tree/graph and then backtracking 
+   - (e.g., pathfinding, solving mazes, etc.).
+
+
+# DFS and BFS Comparison
+
+- **BFS** explores all nodes at a given "level" before moving on to the next level (hence breadth-first), 
+-whereas **DFS** explores as deep as possible into a branch before backtracking (hence depth-first).
+- **BFS** is typically better for finding the shortest path in an unweighted graph because it explores
+- level by level, while **DFS** might not always find the shortest path but is useful for exploring all
+- possibilities.
+- **BFS** uses a queue, whereas **DFS** can use recursion or a stack.
+
+# Recap of BFS and DFS Steps:
+
+### BFS:
+1. Initialize a queue to keep track of the nodes to visit.
+2. Initialize a visited array to mark nodes that have already been visited.
+3. Push the starting node into the queue and mark it as visited.
+4. While the queue is not empty:
+   - Dequeue the front node (`curr`).
+   - For all neighboring nodes (`i`):
+     - If the neighbor is not visited and there is an edge (`adj[curr][i] == 1`), enqueue the neighbor and
+     - mark it as visited.
+
+### DFS:
+1. Initialize a visited array to mark nodes that have already been visited.
+2. Start DFS either using a stack or recursion.
+   - For each node, mark it as visited.
+   - For all neighboring nodes (`i`):
+     - If the neighbor is not visited and there is an edge (`adj[curr][i] == 1`), continue DFS on the 
+     - neighbor (either recursively or by pushing it to the stack).

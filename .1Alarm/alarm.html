@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Alarm Clock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        input, button {
+            font-size: 18px;
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Set Your Alarm</h2>
+    <label for="alarmTime">Alarm Time:</label>
+    <input type="time" id="alarmTime">
+    <br>
+    <label for="youtubeLink">YouTube Link:</label>
+    <input type="url" id="youtubeLink" placeholder="Enter YouTube link">
+    <br>
+    <button onclick="setAlarm()">Set Alarm</button>
+    <p id="status"></p>
+
+    <script>
+        function setAlarm() {
+            let time = document.getElementById('alarmTime').value;
+            let link = document.getElementById('youtubeLink').value;
+            
+            if (!time || !link) {
+                alert('Please set a valid time and YouTube link!');
+                return;
+            }
+            
+            localStorage.setItem('alarmTime', time);
+            localStorage.setItem('youtubeLink', link);
+            document.getElementById('status').innerText = `Alarm set for ${time}`;
+            
+            checkAlarm();
+        }
+        
+        function checkAlarm() {
+            setInterval(() => {
+                let now = new Date();
+                let currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+                let alarmTime = localStorage.getItem('alarmTime');
+                let youtubeLink = localStorage.getItem('youtubeLink');
+                
+                if (alarmTime === currentTime) {
+                    localStorage.removeItem('alarmTime');
+                    localStorage.removeItem('youtubeLink');
+                    window.location.href = youtubeLink;
+                }
+            }, 1000);
+        }
+        
+        checkAlarm();
+    </script>
+</body>
+</html>
