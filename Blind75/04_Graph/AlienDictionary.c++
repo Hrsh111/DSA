@@ -38,13 +38,20 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#define vvi vector<vector<int>>
+#define rep(i, a, b) for (int i = (a); i < (b); ++i)
 using namespace std;
 
 class Solution {
 public:
     string alienOrder(vector<string>& words) {
-        // TODO: Implement your solution here
-        
+        // need a queue for pushing the nodes whose indegree are 0 as they can be ahead of other nodes 
+        queue<int> q;
+        int n= words.size();
+        // also need to make an adjacency list 
+        // that is there is a connection b/w the nodes 
+        // Calculate in-degree(how many ingoing edges are there to a particular node )
+        // Now using topo sort (using kahn's algorithm)
 
     }
 };

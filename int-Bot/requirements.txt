@@ -1,0 +1,7 @@
+requests
+watchdog
+rich
+pyttsx3
+faster-whisper
+sounddevice
+numpy

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algo - DSA Interview Bot</title>
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #60a5fa; }
+        .subtitle { color: #888; margin-bottom: 2rem; }
+        .controls { display: flex; gap: 12px; margin-bottom: 1.5rem; }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover { transform: scale(1.05); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        #connectBtn { background: #2563eb; color: white; }
+        #connectBtn.connected { background: #dc2626; }
+        #screenBtn { background: #059669; color: white; }
+        #screenBtn.sharing { background: #dc2626; }
+        #muteBtn { background: #6b7280; color: white; }
+        #muteBtn.muted { background: #f59e0b; }
+        .status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #1a1a2e;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .status.connected { background: #064e3b; color: #6ee7b7; }
+        .status.error { background: #450a0a; color: #fca5a5; }
+        #transcript {
+            width: 90%;
+            max-width: 700px;
+            height: 300px;
+            overflow-y: auto;
+            background: #111;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .msg { margin-bottom: 8px; }
+        .msg.agent { color: #60a5fa; }
+        .msg.user { color: #a3e635; }
+        .visualizer {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            height: 40px;
+            margin: 1rem 0;
+        }
+        .bar {
+            width: 4px;
+            background: #2563eb;
+            border-radius: 2px;
+            transition: height 0.1s;
+        }
+    </style>
+</head>
+<body>
+    <h1>Algo</h1>
+    <p class="subtitle">AI Interview Practice Partner</p>
+
+    <div id="statusBar" class="status">Disconnected</div>
+
+    <div class="controls">
+        <button id="connectBtn" onclick="toggleConnect()">Connect</button>
+        <button id="screenBtn" onclick="toggleScreen()" disabled>Share Screen</button>
+        <button id="muteBtn" onclick="toggleMute()" disabled>Mute</button>
+    </div>
+
+    <div class="visualizer" id="visualizer"></div>
+
+    <div id="transcript">
+        <div class="msg" style="color: #888;">Click "Connect" to start your interview session...</div>
+    </div>
+
+    <script>
+    const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzI1NTUzOTQsImlkZW50aXR5IjoiaGFyc2hyYWoiLCJpc3MiOiJkZXZrZXkiLCJuYW1lIjoiaGFyc2hyYWoiLCJuYmYiOjE3NzI0Njg5OTQsInJvb21Db25maWciOnsiYWdlbnRzIjpbeyJhZ2VudE5hbWUiOiJhbGdvLWludGVydmlld2VyIn1dfSwic3ViIjoiaGFyc2hyYWoiLCJ2aWRlbyI6eyJyb29tIjoiaW50ZXJ2aWV3LXJvb20iLCJyb29tSm9pbiI6dHJ1ZX19.ZQeY8yyXGM77VtVyKXSdzNlm6shOBby4FXJDfqalrVA';
+    const WS_URL = 'ws://localhost:7880';
+
+    let room = null;
+    let connected = false;
+    let screenTrack = null;
+    let muted = false;
+
+    async function toggleConnect() {
+        if (connected) {
+            await disconnect();
+        } else {
+            await connect();
+        }
+    }
+
+    async function connect() {
+        const statusBar = document.getElementById('statusBar');
+        const connectBtn = document.getElementById('connectBtn');
+
+        statusBar.textContent = 'Connecting...';
+        statusBar.className = 'status';
+
+        try {
+            // Generate token via LiveKit API
+            room = new LivekitClient.Room({
+                adaptiveStream: true,
+                dynacast: true,
+            });
+
+            room.on(LivekitClient.RoomEvent.TrackSubscribed, (track, pub, participant) => {
+                if (track.kind === 'audio') {
+                    const el = track.attach();
+                    document.body.appendChild(el);
+                }
+            });
+
+            room.on(LivekitClient.RoomEvent.Disconnected, () => {
+                updateUI(false);
+                statusBar.textContent = 'Disconnected';
+                statusBar.className = 'status';
+            });
+
+            room.on(LivekitClient.RoomEvent.DataReceived, (payload, participant) => {
+                try {
+                    const msg = JSON.parse(new TextDecoder().decode(payload));
+                    if (msg.text) {
+                        addTranscript(msg.role === 'agent' ? 'agent' : 'user', msg.text);
+                    }
+                } catch(e) {}
+            });
+
+            await room.connect(WS_URL, TOKEN);
+            await room.localParticipant.setMicrophoneEnabled(true);
+
+            connected = true;
+            updateUI(true);
+            statusBar.textContent = 'Connected - Speak to start your interview!';
+            statusBar.className = 'status connected';
+            addTranscript('system', 'Connected to Algo. Start speaking!');
+
+        } catch (e) {
+            console.error('Connection error:', e);
+            statusBar.textContent = 'Connection failed: ' + e.message;
+            statusBar.className = 'status error';
+        }
+    }
+
+    async function disconnect() {
+        if (room) {
+            await room.disconnect();
+            room = null;
+        }
+        connected = false;
+        updateUI(false);
+    }
+
+    async function toggleScreen() {
+        if (!room) return;
+        const btn = document.getElementById('screenBtn');
+
+        if (screenTrack) {
+            await room.localParticipant.setScreenShareEnabled(false);
+            screenTrack = null;
+            btn.textContent = 'Share Screen';
+            btn.className = '';
+            addTranscript('system', 'Screen sharing stopped.');
+        } else {
+            try {
+                await room.localParticipant.setScreenShareEnabled(true);
+                screenTrack = true;
+                btn.textContent = 'Stop Sharing';
+                btn.className = 'sharing';
+                addTranscript('system', 'Screen sharing started! Algo can now see your code.');
+            } catch(e) {
+                console.error('Screen share error:', e);
+                addTranscript('system', 'Screen share failed: ' + e.message);
+            }
+        }
+    }
+
+    async function toggleMute() {
+        if (!room) return;
+        muted = !muted;
+        await room.localParticipant.setMicrophoneEnabled(!muted);
+        const btn = document.getElementById('muteBtn');
+        btn.textContent = muted ? 'Unmute' : 'Mute';
+        btn.className = muted ? 'muted' : '';
+    }
+
+    function updateUI(isConnected) {
+        const connectBtn = document.getElementById('connectBtn');
+        const screenBtn = document.getElementById('screenBtn');
+        const muteBtn = document.getElementById('muteBtn');
+
+        connectBtn.textContent = isConnected ? 'Disconnect' : 'Connect';
+        connectBtn.className = isConnected ? 'connected' : '';
+        screenBtn.disabled = !isConnected;
+        muteBtn.disabled = !isConnected;
+    }
+
+    function addTranscript(role, text) {
+        const div = document.getElementById('transcript');
+        const msg = document.createElement('div');
+        msg.className = 'msg ' + role;
+        const prefix = role === 'agent' ? 'Algo: ' : role === 'user' ? 'You: ' : '> ';
+        msg.textContent = prefix + text;
+        div.appendChild(msg);
+        div.scrollTop = div.scrollHeight;
+    }
+    </script>
+</body>
+</html>

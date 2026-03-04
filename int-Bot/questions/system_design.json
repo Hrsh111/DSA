@@ -1,0 +1,47 @@
+[
+  {
+    "id": "sd_01",
+    "title": "Design a URL Shortener",
+    "difficulty": "medium",
+    "description": "Design a URL shortening service like TinyURL. Given a long URL, generate a short unique URL. Given a short URL, redirect to the original long URL. Consider how you'd handle collisions and scale.",
+    "examples": [{"input": "longUrl = 'https://example.com/very/long/path'", "output": "shortUrl = 'https://tiny.url/abc123'"}],
+    "hints": [
+      "Think about the core operations: encode (long to short) and decode (short to long). What data structure maps between them?",
+      "A hash map works. For generating short codes, consider base62 encoding of an auto-increment ID or a hash of the URL.",
+      "Use a counter-based ID converted to base62 for the short code. Store bidirectional mappings. For scale, think about database sharding and caching."
+    ],
+    "expected_complexity": {"time": "O(1) per operation", "space": "O(n)"},
+    "follow_ups": ["How would you handle high traffic?", "How do you prevent abuse?", "What about custom short URLs?"],
+    "tags": ["design", "hash_map", "encoding"]
+  },
+  {
+    "id": "sd_02",
+    "title": "Design an LRU Cache",
+    "difficulty": "medium",
+    "description": "Design and implement a Least Recently Used cache. It should support get(key) and put(key, value) operations in O(1) time. When the cache reaches capacity, evict the least recently used item.",
+    "examples": [{"input": "capacity = 2, put(1,1), put(2,2), get(1), put(3,3)", "output": "get(1) returns 1, key 2 is evicted"}],
+    "hints": [
+      "You need O(1) lookup AND O(1) ordering updates. Which two data structures together achieve this?",
+      "Hash map for O(1) lookup. Doubly linked list for O(1) move-to-front and remove-from-end.",
+      "Hash map stores key -> DLL node. On get: move node to front. On put: add to front, if over capacity remove from tail."
+    ],
+    "expected_complexity": {"time": "O(1) per operation", "space": "O(capacity)"},
+    "follow_ups": ["How would you make it thread-safe?", "What about an LFU cache?", "How would you distribute it across servers?"],
+    "tags": ["design", "hash_map", "linked_list"]
+  },
+  {
+    "id": "sd_03",
+    "title": "Design a Rate Limiter",
+    "difficulty": "medium",
+    "description": "Design a rate limiter that limits the number of requests a client can make within a given time window. For example, allow at most 100 requests per minute per user.",
+    "examples": [{"input": "limit = 100 requests per 60 seconds, user makes 101st request", "output": "Request denied"}],
+    "hints": [
+      "Think about how you track the number of requests in a sliding time window.",
+      "Token bucket or sliding window counter are common approaches. Token bucket: tokens refill at a fixed rate, each request costs one token.",
+      "Sliding window: store timestamps of recent requests. On new request, remove timestamps older than the window, check if count < limit."
+    ],
+    "expected_complexity": {"time": "O(1) amortized", "space": "O(limit)"},
+    "follow_ups": ["Token bucket vs sliding window — trade-offs?", "How would you make it distributed?", "How do you handle burst traffic?"],
+    "tags": ["design", "queue", "system"]
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "bs_01",
+    "title": "Binary Search",
+    "difficulty": "easy",
+    "description": "Given a sorted array of integers nums and a target value, return the index of the target if found. If not, return -1.",
+    "examples": [{"input": "nums = [-1,0,3,5,9,12], target = 9", "output": "4"}],
+    "hints": [
+      "The array is sorted. How can you eliminate half the search space each time?",
+      "Compare the middle element with the target. Go left or right accordingly.",
+      "Set low=0, high=n-1. While low <= high, compute mid. If nums[mid] == target, return mid. If less, low=mid+1. If more, high=mid-1."
+    ],
+    "expected_complexity": {"time": "O(log n)", "space": "O(1)"},
+    "follow_ups": ["What if you need to find the first or last occurrence?", "What about searching in a rotated sorted array?"],
+    "tags": ["binary_search"]
+  },
+  {
+    "id": "bs_02",
+    "title": "Search in Rotated Sorted Array",
+    "difficulty": "medium",
+    "description": "An integer array sorted in ascending order is rotated at some pivot. Given the rotated array and a target, return the index of the target or -1. All values are unique.",
+    "examples": [{"input": "nums = [4,5,6,7,0,1,2], target = 0", "output": "4"}],
+    "hints": [
+      "You can still use binary search, but you need to figure out which half is sorted.",
+      "At any mid point, one half of the array is always sorted. Check if target falls in the sorted half.",
+      "If left half is sorted (nums[low] <= nums[mid]): check if target is in [low, mid]. If right half is sorted: check if target is in [mid, high]."
+    ],
+    "expected_complexity": {"time": "O(log n)", "space": "O(1)"},
+    "follow_ups": ["What if duplicates are allowed?", "Can you find the rotation point?"],
+    "tags": ["binary_search"]
+  },
+  {
+    "id": "bs_03",
+    "title": "Find Minimum in Rotated Sorted Array",
+    "difficulty": "medium",
+    "description": "A sorted array of unique integers is rotated between 1 and n times. Find the minimum element. The original array was in ascending order.",
+    "examples": [{"input": "nums = [3,4,5,1,2]", "output": "1"}],
+    "hints": [
+      "The minimum is at the rotation point. How does binary search help find it?",
+      "Compare mid with the rightmost element. If mid > right, minimum is in the right half.",
+      "If nums[mid] > nums[high], minimum is in [mid+1, high]. Else it's in [low, mid]. Converge to the answer."
+    ],
+    "expected_complexity": {"time": "O(log n)", "space": "O(1)"},
+    "follow_ups": ["What if there are duplicates?", "Can you find the maximum in O(log n)?"],
+    "tags": ["binary_search"]
+  },
+  {
+    "id": "bs_04",
+    "title": "Koko Eating Bananas",
+    "difficulty": "medium",
+    "description": "Koko can eat bananas at speed k (bananas per hour). She has piles of bananas and h hours. Find the minimum k such that she can eat all bananas within h hours. Each hour she picks one pile and eats k bananas from it.",
+    "examples": [{"input": "piles = [3,6,7,11], h = 8", "output": "4"}],
+    "hints": [
+      "You're searching for a value k in a range. The answer has a monotonic property — if k works, k+1 also works.",
+      "Binary search on the answer! Search for k in range [1, max(piles)].",
+      "For each candidate k, compute total hours needed: sum of ceil(pile/k) for each pile. If total <= h, try smaller k."
+    ],
+    "expected_complexity": {"time": "O(n * log(max))", "space": "O(1)"},
+    "follow_ups": ["What other problems can be solved with binary search on the answer?", "What if she must eat piles in order?"],
+    "tags": ["binary_search", "binary_search_on_answer"]
+  }
+]

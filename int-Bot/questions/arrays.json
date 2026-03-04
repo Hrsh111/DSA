@@ -1,0 +1,152 @@
+[
+  {
+    "id": "arr_01",
+    "title": "Two Sum",
+    "difficulty": "easy",
+    "description": "Given an array of integers nums and an integer target, return the indices of the two numbers that add up to the target. You may assume each input has exactly one solution, and you can't use the same element twice.",
+    "examples": [{"input": "nums = [2,7,11,15], target = 9", "output": "[0, 1]"}],
+    "hints": [
+      "Think about what value you need to find for each number to reach the target.",
+      "A hash map lets you store numbers you've seen and look up complements in O(1).",
+      "For each number, check if target minus that number exists in your map. If not, store the current number and its index."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(n)"},
+    "follow_ups": ["Can you do it in a single pass?", "What if there could be multiple valid pairs?"],
+    "tags": ["hash_map"]
+  },
+  {
+    "id": "arr_02",
+    "title": "Best Time to Buy and Sell Stock",
+    "difficulty": "easy",
+    "description": "You are given an array prices where prices[i] is the price of a given stock on the ith day. You want to maximize your profit by choosing a single day to buy and a single day to sell. Return the maximum profit. If no profit is possible, return 0.",
+    "examples": [{"input": "prices = [7,1,5,3,6,4]", "output": "5"}],
+    "hints": [
+      "You want to buy low and sell high, but you must buy before you sell.",
+      "Track the minimum price you've seen so far as you scan left to right.",
+      "At each price, your potential profit is current price minus the minimum seen so far. Track the maximum of these."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(1)"},
+    "follow_ups": ["What if you could buy and sell multiple times?", "What if there's a transaction fee?"],
+    "tags": ["greedy", "sliding_window"]
+  },
+  {
+    "id": "arr_03",
+    "title": "Contains Duplicate",
+    "difficulty": "easy",
+    "description": "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
+    "examples": [{"input": "nums = [1,2,3,1]", "output": "true"}],
+    "hints": [
+      "What data structure is good for checking if you've seen something before?",
+      "A set gives you O(1) lookups.",
+      "Add each element to a set. If it's already in the set, return true."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(n)"},
+    "follow_ups": ["Can you solve it in O(1) space?", "What if you need to find duplicates within k distance?"],
+    "tags": ["hash_set"]
+  },
+  {
+    "id": "arr_04",
+    "title": "Product of Array Except Self",
+    "difficulty": "medium",
+    "description": "Given an integer array nums, return an array answer such that answer[i] is the product of all elements of nums except nums[i]. You must solve it without using division and in O(n) time.",
+    "examples": [{"input": "nums = [1,2,3,4]", "output": "[24,12,8,6]"}],
+    "hints": [
+      "Think about what the product except self really means — it's the product of everything to the left times everything to the right.",
+      "You can compute prefix products (left to right) and suffix products (right to left) separately.",
+      "First pass: build left products. Second pass: multiply by right products going backwards. Use the output array to save space."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(1)"},
+    "follow_ups": ["What if the array contains zeros?", "Can you handle it with division in O(n)?"],
+    "tags": ["prefix_sum"]
+  },
+  {
+    "id": "arr_05",
+    "title": "Maximum Subarray",
+    "difficulty": "medium",
+    "description": "Given an integer array nums, find the subarray with the largest sum and return its sum. A subarray is a contiguous non-empty sequence of elements.",
+    "examples": [{"input": "nums = [-2,1,-3,4,-1,2,1,-5,4]", "output": "6"}],
+    "hints": [
+      "Think about when it makes sense to start a new subarray versus extending the current one.",
+      "This is a classic dynamic programming problem known as Kadane's algorithm.",
+      "At each position, your current sum is max(nums[i], currentSum + nums[i]). If the running sum goes negative, reset it."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(1)"},
+    "follow_ups": ["Can you solve it using divide and conquer?", "What if you need to return the actual subarray?"],
+    "tags": ["dp", "kadane"]
+  },
+  {
+    "id": "arr_06",
+    "title": "3Sum",
+    "difficulty": "medium",
+    "description": "Given an integer array nums, return all unique triplets [nums[i], nums[j], nums[k]] such that i != j != k and nums[i] + nums[j] + nums[k] == 0. The solution set must not contain duplicate triplets.",
+    "examples": [{"input": "nums = [-1,0,1,2,-1,-4]", "output": "[[-1,-1,2],[-1,0,1]]"}],
+    "hints": [
+      "Sorting the array first can help you avoid duplicates and use a smarter search.",
+      "Fix one element, then use two pointers on the remaining sorted portion to find pairs that sum to the negative of the fixed element.",
+      "Sort the array. For each i, use left=i+1 and right=n-1. Skip duplicate values of i, left, and right."
+    ],
+    "expected_complexity": {"time": "O(n^2)", "space": "O(1)"},
+    "follow_ups": ["How would you extend this to 4Sum?", "What if you need the closest sum to a target?"],
+    "tags": ["two_pointer", "sorting"]
+  },
+  {
+    "id": "arr_07",
+    "title": "Container With Most Water",
+    "difficulty": "medium",
+    "description": "You are given an array height of length n. There are n vertical lines drawn. Find two lines that together with the x-axis form a container that holds the most water. Return the maximum amount of water the container can store.",
+    "examples": [{"input": "height = [1,8,6,2,5,4,8,3,7]", "output": "49"}],
+    "hints": [
+      "The area is determined by the shorter line times the distance between lines. Start with maximum distance.",
+      "Use two pointers starting at both ends of the array.",
+      "Move the pointer pointing to the shorter line inward, because moving the taller one can never increase the area."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(1)"},
+    "follow_ups": ["Can you prove why the two-pointer approach is correct?", "What if the lines have thickness?"],
+    "tags": ["two_pointer", "greedy"]
+  },
+  {
+    "id": "arr_08",
+    "title": "Merge Intervals",
+    "difficulty": "medium",
+    "description": "Given an array of intervals where intervals[i] = [start_i, end_i], merge all overlapping intervals and return an array of the non-overlapping intervals that cover all the intervals in the input.",
+    "examples": [{"input": "intervals = [[1,3],[2,6],[8,10],[15,18]]", "output": "[[1,6],[8,10],[15,18]]"}],
+    "hints": [
+      "If the intervals were sorted, overlapping ones would be adjacent.",
+      "Sort by start time. Then iterate and merge whenever the current interval overlaps with the last merged one.",
+      "Two intervals overlap if the current start is less than or equal to the previous end. When merging, take the max of both ends."
+    ],
+    "expected_complexity": {"time": "O(n log n)", "space": "O(n)"},
+    "follow_ups": ["What if you need to insert a new interval into a sorted list?", "How would you handle this in a stream of incoming intervals?"],
+    "tags": ["sorting", "intervals"]
+  },
+  {
+    "id": "arr_09",
+    "title": "Trapping Rain Water",
+    "difficulty": "hard",
+    "description": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+    "examples": [{"input": "height = [0,1,0,2,1,0,1,3,2,1,2,1]", "output": "6"}],
+    "hints": [
+      "The water above each bar depends on the tallest bars to its left and right.",
+      "Water at position i = min(maxLeft, maxRight) - height[i]. You could precompute maxLeft and maxRight arrays.",
+      "For O(1) space, use two pointers from both ends. Track leftMax and rightMax. Process the side with the smaller max."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(1)"},
+    "follow_ups": ["Can you solve it using a stack?", "How would you extend this to 2D?"],
+    "tags": ["two_pointer", "stack", "dp"]
+  },
+  {
+    "id": "arr_10",
+    "title": "Sliding Window Maximum",
+    "difficulty": "hard",
+    "description": "You are given an array of integers nums and a sliding window of size k which moves from the left to the right. You can only see the k numbers in the window. Return the max value in each window position.",
+    "examples": [{"input": "nums = [1,3,-1,-3,5,3,6,7], k = 3", "output": "[3,3,5,5,6,7]"}],
+    "hints": [
+      "A brute force approach checks all k elements for each window. Can you do better?",
+      "A monotonic decreasing deque can help you track the maximum efficiently.",
+      "Maintain a deque of indices. Remove from back while current element is larger. Remove from front if index is out of window. Front of deque is always the max."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(k)"},
+    "follow_ups": ["Can you solve it using a heap?", "What about a sliding window minimum?"],
+    "tags": ["deque", "sliding_window", "monotonic"]
+  }
+]

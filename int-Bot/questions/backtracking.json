@@ -1,0 +1,62 @@
+[
+  {
+    "id": "bt_01",
+    "title": "Subsets",
+    "difficulty": "medium",
+    "description": "Given an integer array nums of unique elements, return all possible subsets (the power set). The solution must not contain duplicate subsets.",
+    "examples": [{"input": "nums = [1,2,3]", "output": "[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]"}],
+    "hints": [
+      "For each element, you have two choices: include it or exclude it.",
+      "Use backtracking — at each step, decide to take or skip the current element.",
+      "Start with empty subset. For each index, add nums[index] to current subset, recurse, then remove it (backtrack). Also recurse without adding."
+    ],
+    "expected_complexity": {"time": "O(2^n)", "space": "O(n)"},
+    "follow_ups": ["What if nums contains duplicates?", "Can you solve it iteratively?"],
+    "tags": ["backtracking", "recursion"]
+  },
+  {
+    "id": "bt_02",
+    "title": "Permutations",
+    "difficulty": "medium",
+    "description": "Given an array nums of distinct integers, return all possible permutations in any order.",
+    "examples": [{"input": "nums = [1,2,3]", "output": "[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]"}],
+    "hints": [
+      "A permutation is an arrangement where order matters and all elements are used. How do you build one?",
+      "At each position, choose from the remaining unused elements. Use a visited set or swap technique.",
+      "Backtrack: for each position, try each unused number. Add to current permutation, mark used, recurse, then unmark (backtrack)."
+    ],
+    "expected_complexity": {"time": "O(n!)", "space": "O(n)"},
+    "follow_ups": ["What if nums contains duplicates?", "How would you generate the kth permutation directly?"],
+    "tags": ["backtracking", "recursion"]
+  },
+  {
+    "id": "bt_03",
+    "title": "N-Queens",
+    "difficulty": "hard",
+    "description": "Place n queens on an n x n chessboard such that no two queens threaten each other. Return all distinct solutions. Queens attack along rows, columns, and diagonals.",
+    "examples": [{"input": "n = 4", "output": "2 solutions"}],
+    "hints": [
+      "Place queens row by row. For each row, try each column. What constraints must you check?",
+      "A queen is safe if no other queen is in the same column, same diagonal, or same anti-diagonal.",
+      "Use sets to track occupied columns, diagonals (row-col), and anti-diagonals (row+col). Backtrack when no valid column exists."
+    ],
+    "expected_complexity": {"time": "O(n!)", "space": "O(n^2)"},
+    "follow_ups": ["Can you count solutions without generating them all?", "What optimizations can reduce the search space?"],
+    "tags": ["backtracking", "recursion", "constraint_satisfaction"]
+  },
+  {
+    "id": "bt_04",
+    "title": "Word Search",
+    "difficulty": "medium",
+    "description": "Given an m x n grid of characters and a string word, return true if word exists in the grid. The word can be constructed from letters of adjacent cells (horizontally or vertically). Each cell may be used only once.",
+    "examples": [{"input": "board = [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']], word = 'ABCCED'", "output": "true"}],
+    "hints": [
+      "Start DFS from every cell that matches the first letter. How do you ensure you don't revisit cells?",
+      "Mark cells as visited during the current path. Unmark them when backtracking.",
+      "For each cell matching word[0], DFS checking 4 neighbors. Mark cell visited, recurse for next character, unmark on backtrack."
+    ],
+    "expected_complexity": {"time": "O(m*n*4^L)", "space": "O(L)"},
+    "follow_ups": ["What if you need to find multiple words? (Word Search II with Trie)", "How can you prune the search space?"],
+    "tags": ["backtracking", "dfs", "matrix"]
+  }
+]

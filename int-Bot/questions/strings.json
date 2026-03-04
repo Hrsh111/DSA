@@ -1,0 +1,77 @@
+[
+  {
+    "id": "str_01",
+    "title": "Valid Anagram",
+    "difficulty": "easy",
+    "description": "Given two strings s and t, return true if t is an anagram of s, and false otherwise. An anagram uses the same characters the same number of times.",
+    "examples": [{"input": "s = 'anagram', t = 'nagaram'", "output": "true"}],
+    "hints": [
+      "What property must two strings have if they're anagrams?",
+      "Count the frequency of each character in both strings and compare.",
+      "Use a hash map or array of size 26. Increment for s, decrement for t, check all are zero."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(1)"},
+    "follow_ups": ["What if the inputs contain unicode characters?", "Can you solve it using sorting?"],
+    "tags": ["hash_map", "counting"]
+  },
+  {
+    "id": "str_02",
+    "title": "Valid Parentheses",
+    "difficulty": "easy",
+    "description": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. Every open bracket must be closed by the same type and in the correct order.",
+    "examples": [{"input": "s = '([{}])'", "output": "true"}],
+    "hints": [
+      "Think about what data structure naturally handles matching pairs in order.",
+      "A stack is perfect here — push opening brackets, pop for closing ones.",
+      "For each closing bracket, check if the top of the stack is its matching opener. Stack must be empty at the end."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(n)"},
+    "follow_ups": ["What if you only had one type of bracket?", "What's the minimum number of brackets to add to make it valid?"],
+    "tags": ["stack"]
+  },
+  {
+    "id": "str_03",
+    "title": "Longest Substring Without Repeating Characters",
+    "difficulty": "medium",
+    "description": "Given a string s, find the length of the longest substring without repeating characters.",
+    "examples": [{"input": "s = 'abcabcbb'", "output": "3"}],
+    "hints": [
+      "A brute force checks all substrings. Can you do better with a sliding window?",
+      "Use a sliding window with a set to track characters in the current window.",
+      "Expand the right pointer. When you see a duplicate, shrink from the left until the duplicate is removed. Track max length."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(min(n, alphabet))"},
+    "follow_ups": ["What if you need the actual substring?", "What if you're allowed at most k repeating characters?"],
+    "tags": ["sliding_window", "hash_set"]
+  },
+  {
+    "id": "str_04",
+    "title": "Longest Palindromic Substring",
+    "difficulty": "medium",
+    "description": "Given a string s, return the longest palindromic substring in s.",
+    "examples": [{"input": "s = 'babad'", "output": "'bab' or 'aba'"}],
+    "hints": [
+      "A palindrome mirrors around its center. How many possible centers are there?",
+      "Expand around each center — there are 2n-1 centers (each char + each gap between chars).",
+      "For each center, expand outward while characters match. Track the longest palindrome found."
+    ],
+    "expected_complexity": {"time": "O(n^2)", "space": "O(1)"},
+    "follow_ups": ["Can you solve it in O(n) using Manacher's algorithm?", "How about longest palindromic subsequence?"],
+    "tags": ["two_pointer", "dp"]
+  },
+  {
+    "id": "str_05",
+    "title": "Minimum Window Substring",
+    "difficulty": "hard",
+    "description": "Given two strings s and t, return the minimum window substring of s that contains all characters of t (including duplicates). If no such window exists, return an empty string.",
+    "examples": [{"input": "s = 'ADOBECODEBANC', t = 'ABC'", "output": "'BANC'"}],
+    "hints": [
+      "This is a sliding window problem. What do you need to track about the characters in your window?",
+      "Use two hash maps — one for t's character counts, one for the current window. Expand right to include characters, shrink left to minimize.",
+      "Track how many unique characters have met their required count. When all are met, try shrinking from left. Update the minimum window."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(n)"},
+    "follow_ups": ["What if you need to find all minimum windows?", "What if the order matters?"],
+    "tags": ["sliding_window", "hash_map"]
+  }
+]

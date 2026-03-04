@@ -1,0 +1,47 @@
+[
+  {
+    "id": "sq_01",
+    "title": "Min Stack",
+    "difficulty": "medium",
+    "description": "Design a stack that supports push, pop, top, and retrieving the minimum element, all in O(1) time.",
+    "examples": [{"input": "push(-2), push(0), push(-3), getMin() -> -3, pop(), top() -> 0, getMin() -> -2", "output": "As shown"}],
+    "hints": [
+      "A regular stack gives you O(1) push/pop/top. The challenge is O(1) getMin. What changes when you push or pop?",
+      "Maintain a second stack that tracks the current minimum at each level.",
+      "When pushing, also push onto min stack: min(val, current min). When popping, pop from both stacks."
+    ],
+    "expected_complexity": {"time": "O(1) per operation", "space": "O(n)"},
+    "follow_ups": ["Can you use only one stack?", "How about a max stack?"],
+    "tags": ["stack", "design"]
+  },
+  {
+    "id": "sq_02",
+    "title": "Daily Temperatures",
+    "difficulty": "medium",
+    "description": "Given an array of daily temperatures, return an array where answer[i] is the number of days you have to wait after day i for a warmer temperature. If no future day is warmer, put 0.",
+    "examples": [{"input": "temperatures = [73,74,75,71,69,72,76,73]", "output": "[1,1,4,2,1,1,0,0]"}],
+    "hints": [
+      "For each day, you're looking for the next greater element. What data structure helps with 'next greater' problems?",
+      "A monotonic decreasing stack stores indices of temperatures waiting for a warmer day.",
+      "Iterate through temperatures. While stack is non-empty and current temp > stack top's temp, pop and compute the difference in indices. Push current index."
+    ],
+    "expected_complexity": {"time": "O(n)", "space": "O(n)"},
+    "follow_ups": ["Can you solve it without a stack?", "What about finding the previous greater element?"],
+    "tags": ["stack", "monotonic_stack"]
+  },
+  {
+    "id": "sq_03",
+    "title": "Implement Queue Using Stacks",
+    "difficulty": "easy",
+    "description": "Implement a FIFO queue using only two stacks. The queue should support push, pop, peek, and empty operations.",
+    "examples": [{"input": "push(1), push(2), peek() -> 1, pop() -> 1, empty() -> false", "output": "As shown"}],
+    "hints": [
+      "A stack is LIFO, a queue is FIFO. How can reversing help?",
+      "Use two stacks: one for input, one for output. Transfer from input to output when output is empty.",
+      "Push to input stack. For pop/peek, if output stack is empty, transfer all from input to output (reverses order). Then pop/peek from output."
+    ],
+    "expected_complexity": {"time": "O(1) amortized per operation", "space": "O(n)"},
+    "follow_ups": ["What's the amortized time complexity?", "Can you implement a stack using two queues?"],
+    "tags": ["stack", "queue", "design"]
+  }
+]

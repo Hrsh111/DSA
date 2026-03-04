@@ -1,0 +1,47 @@
+[
+  {
+    "id": "heap_01",
+    "title": "Kth Largest Element in an Array",
+    "difficulty": "medium",
+    "description": "Given an integer array nums and an integer k, return the kth largest element in the array. Note that it is the kth largest, not the kth distinct element.",
+    "examples": [{"input": "nums = [3,2,1,5,6,4], k = 2", "output": "5"}],
+    "hints": [
+      "Sorting gives O(n log n). Can you do better?",
+      "A min-heap of size k always has the kth largest element at the top.",
+      "Push elements into a min-heap. When size exceeds k, pop the smallest. After processing all elements, the top is the kth largest."
+    ],
+    "expected_complexity": {"time": "O(n log k)", "space": "O(k)"},
+    "follow_ups": ["Can you solve it in O(n) average time with quickselect?", "What if the array is a stream?"],
+    "tags": ["heap", "quickselect"]
+  },
+  {
+    "id": "heap_02",
+    "title": "Find Median from Data Stream",
+    "difficulty": "hard",
+    "description": "Design a data structure that supports addNum(num) to add an integer from the stream and findMedian() to return the median of all elements added so far.",
+    "examples": [{"input": "addNum(1), addNum(2), findMedian() -> 1.5, addNum(3), findMedian() -> 2.0", "output": "As shown"}],
+    "hints": [
+      "The median splits data into two halves. What if you could efficiently access the largest of the small half and smallest of the large half?",
+      "Use two heaps: a max-heap for the lower half and a min-heap for the upper half.",
+      "Keep both heaps balanced in size (differ by at most 1). Median is either the top of the larger heap or average of both tops."
+    ],
+    "expected_complexity": {"time": "O(log n) add, O(1) find", "space": "O(n)"},
+    "follow_ups": ["What if you need to remove elements too?", "Can you handle it if 99% of numbers are between 0 and 100?"],
+    "tags": ["heap", "design", "two_heaps"]
+  },
+  {
+    "id": "heap_03",
+    "title": "Merge K Sorted Lists",
+    "difficulty": "hard",
+    "description": "You are given an array of k linked lists, each sorted in ascending order. Merge all the linked lists into one sorted linked list and return it.",
+    "examples": [{"input": "lists = [[1,4,5],[1,3,4],[2,6]]", "output": "[1,1,2,3,4,4,5,6]"}],
+    "hints": [
+      "You need to repeatedly find the smallest element among k list heads. What's efficient for that?",
+      "A min-heap of size k lets you extract the minimum in O(log k).",
+      "Push the head of each list into a min-heap. Pop the minimum, add to result, and push that node's next (if exists) into the heap."
+    ],
+    "expected_complexity": {"time": "O(n log k)", "space": "O(k)"},
+    "follow_ups": ["Can you solve it with divide and conquer?", "What if the lists are very long but k is small?"],
+    "tags": ["heap", "linked_list", "merge"]
+  }
+]

@@ -33,33 +33,29 @@ const int INF = 1e9;
 const ll LINF = 1e18;
 
 void solve() {
-    int n;
-    cin>>n;
+    int n;cin>>n;
     vi a(n);
-    rep(i,0,n) cin>>a[i];
-
-    set<int> winners;
-    rep(s,0,n){
-        vi b(a);
-        int cur=s, last=-1;
-        while (true)
-        {
-            if (b[cur]>0)
-            {
-                b[cur]--;
-                last=cur;
-            }
-            bool done=true;
-            rep(i,0,n)
-            if(b[i]>0){done=false; break;}
-            if(done) break;
-            cur=(cur+1)%n;
-            
-        }
-        winners.insert(last);
-        
+    // first find the largest element 
+    int maxelement;
+    rep(i,0,n){
+        cin>>a[i];
     }
-    cout<< sz(winners)<< "\n";
+    maxelement=*max_element(a.begin(), a.end());
+    int r=-1;
+    rep(i,0,n){
+        if(a[i]==maxelement){
+            r=i;
+        }
+    }
+    int l=0;
+    reverse(a.begin()+l, a.begin()+r+1);
+    rep(i,0,n){
+        cout<<a[i];
+        if(i<n-1)cout<<" ";
+    }
+    cout<<"\n";
+    
+
 }
 
 int main() {

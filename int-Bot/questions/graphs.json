@@ -1,0 +1,77 @@
+[
+  {
+    "id": "graph_01",
+    "title": "Number of Islands",
+    "difficulty": "medium",
+    "description": "Given a 2D grid of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.",
+    "examples": [{"input": "grid = [['1','1','0'],['1','1','0'],['0','0','1']]", "output": "2"}],
+    "hints": [
+      "When you find a '1', how do you know which other '1's belong to the same island?",
+      "Use BFS or DFS from each unvisited '1' to mark all connected land as visited. Each new BFS/DFS start = new island.",
+      "Iterate through grid. When you find '1', increment count and BFS/DFS to mark all connected '1's as '0' or visited."
+    ],
+    "expected_complexity": {"time": "O(m*n)", "space": "O(m*n)"},
+    "follow_ups": ["Can you solve it using Union-Find?", "What if the grid is very large and distributed?"],
+    "tags": ["bfs", "dfs", "matrix"]
+  },
+  {
+    "id": "graph_02",
+    "title": "Clone Graph",
+    "difficulty": "medium",
+    "description": "Given a reference of a node in a connected undirected graph, return a deep copy of the graph. Each node contains a value and a list of its neighbors.",
+    "examples": [{"input": "adjList = [[2,4],[1,3],[2,4],[1,3]]", "output": "Deep copy of same graph"}],
+    "hints": [
+      "The tricky part is handling nodes that appear multiple times due to cycles. How do you avoid duplicating them?",
+      "Use a hash map to track original node -> cloned node. If you've already cloned a node, reuse it.",
+      "BFS or DFS. When visiting a node, create its clone and store in map. For each neighbor, clone if not in map, then add to clone's neighbors."
+    ],
+    "expected_complexity": {"time": "O(V + E)", "space": "O(V)"},
+    "follow_ups": ["What if the graph is directed?", "How would you handle a weighted graph?"],
+    "tags": ["bfs", "dfs", "hash_map"]
+  },
+  {
+    "id": "graph_03",
+    "title": "Course Schedule",
+    "difficulty": "medium",
+    "description": "There are numCourses courses labeled 0 to numCourses-1. You are given prerequisites pairs where [a, b] means you must take b before a. Determine if you can finish all courses (i.e., no circular dependency).",
+    "examples": [{"input": "numCourses = 2, prerequisites = [[1,0]]", "output": "true"}],
+    "hints": [
+      "This is about detecting if a directed graph has a cycle. What algorithm detects cycles in directed graphs?",
+      "Topological sort — if you can produce a valid ordering, there's no cycle.",
+      "Use Kahn's algorithm: compute in-degrees, start BFS from nodes with in-degree 0. If all nodes are processed, no cycle exists."
+    ],
+    "expected_complexity": {"time": "O(V + E)", "space": "O(V + E)"},
+    "follow_ups": ["Can you return the actual course order?", "What if some courses can be taken simultaneously?"],
+    "tags": ["topological_sort", "bfs", "cycle_detection"]
+  },
+  {
+    "id": "graph_04",
+    "title": "Word Ladder",
+    "difficulty": "hard",
+    "description": "Given two words beginWord and endWord, and a dictionary wordList, return the length of the shortest transformation sequence from beginWord to endWord, changing one letter at a time. Each transformed word must exist in the wordList.",
+    "examples": [{"input": "beginWord = 'hit', endWord = 'cog', wordList = ['hot','dot','dog','lot','log','cog']", "output": "5"}],
+    "hints": [
+      "You're looking for the shortest path between two nodes. What algorithm finds shortest paths in unweighted graphs?",
+      "BFS gives you shortest path. Each word is a node, edges connect words that differ by one letter.",
+      "BFS from beginWord. For each word, try changing each character to a-z. If the new word is in wordList and unvisited, add to queue."
+    ],
+    "expected_complexity": {"time": "O(n * m * 26)", "space": "O(n * m)"},
+    "follow_ups": ["Can you find all shortest transformation sequences?", "How would you optimize with bidirectional BFS?"],
+    "tags": ["bfs", "hash_set"]
+  },
+  {
+    "id": "graph_05",
+    "title": "Dijkstra's Shortest Path",
+    "difficulty": "medium",
+    "description": "Given a weighted directed graph with n nodes and a source node, find the shortest path from the source to all other nodes. Edge weights are non-negative.",
+    "examples": [{"input": "n=5, edges=[[0,1,4],[0,2,1],[2,1,2],[1,3,1],[2,3,5]], src=0", "output": "distances = [0,3,1,4,INF]"}],
+    "hints": [
+      "A greedy approach works here — always process the closest unvisited node. What data structure efficiently gives you the minimum?",
+      "A min-heap (priority queue) lets you extract the closest node in O(log n).",
+      "Initialize distances to infinity except source=0. Use min-heap. Pop minimum, relax all neighbors. Skip if already found shorter path."
+    ],
+    "expected_complexity": {"time": "O((V + E) log V)", "space": "O(V + E)"},
+    "follow_ups": ["What if edges can have negative weights?", "How would you reconstruct the actual path?"],
+    "tags": ["shortest_path", "heap", "greedy"]
+  }
+]
